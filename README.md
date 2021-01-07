@@ -17,6 +17,12 @@ by a few members of my family including my mom who is an avid cook.  Here are my
 - [ ] In the Browse Recipe's Page I want to add a way to filter Tags like you can with courses and cuisines.
 - [ ] I would like to add my [Recipe Scraper Fork](https://github.com/cvanbeek13/recipe-scrapers) into a new import page.
 
+## Docs
+
+I kept all the OpenEats docs in place, but will be adding on to the `docs` folder.  Check out these docs I've written:
+
+* [Running the App on Raspberry Pi](docs/Running_the_App_on_Raspberry_Pi.md)
+
 # OpenEats Project
 
 OpenEats is a recipe management site that allows users to create, share, and store their personal collection of recipes. This fork uses Django Rest Framework as a backend and React (with flux) as a front end.
