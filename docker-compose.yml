@@ -1,5 +1,11 @@
 version: '2.3'
 services:
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: on-failure
   api:
     build: openeats-api/
     command: python manage.py runserver 0.0.0.0:8000
@@ -10,7 +16,7 @@ services:
       - static-files:/code/static-files
       - site-media:/code/site-media
     depends_on:
-      - db
+       - dockerhost
     ports:
       - "8000:8000"
   web:
@@ -24,15 +30,7 @@ services:
       - api
     ports:
       - "8080:8080"
-  db:
-    image: mariadb
-    env_file:
-      env_dev.list
-    volumes:
-      - database:/var/lib/mysql
-    ports:
-      - "3306:3306"
 volumes:
-  database:
   static-files:
   site-media:
+

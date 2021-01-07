@@ -2,6 +2,10 @@
 MYSQL_DATABASE=openeats
 MYSQL_ROOT_PASSWORD=root
 
+MYSQL_USER=openeats
+MYSQL_HOST=dockerhost
+MYSQL_PORT=3306
+
 # Django config
 API_URL=0.0.0.0:8000
 API_PORT=8000

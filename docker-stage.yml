@@ -1,5 +1,11 @@
 version: '2.3'
 services:
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: on-failure
   api:
     build: openeats-api/
     command: /startup/prod-entrypoint.sh
@@ -8,8 +14,7 @@ services:
       - static-files:/code/static-files
       - site-media:/code/site-media
     depends_on:
-      db:
-        condition: service_healthy
+      - dockerhost
     env_file:
       env_stg.list
   web:
@@ -19,16 +24,6 @@ services:
       - public-ui:/code/build
     depends_on:
       - api
-    env_file:
-      env_stg.list
-  db:
-    image: mariadb
-    volumes:
-      - database:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 20
     env_file:
       env_stg.list
   nginx:
@@ -46,7 +41,7 @@ services:
     env_file:
       env_stg.list
 volumes:
-  database:
   public-ui:
   static-files:
   site-media:
+
