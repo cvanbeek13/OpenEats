@@ -12,6 +12,8 @@
     - [Seeding the Database](#seeding-the-database)
     - [Running in Production Mode](#running-in-production-mode)
     - [Other Recommendations](#other-recommendations)
+    - [Additional Troubleshooting](#additional-troubleshooting)
+      - [Images not Appearing](#images-not-appearing)
 
 # Running the App on Raspberry Pi (RPi)
 
@@ -189,3 +191,21 @@ From another computer, open a web browser and navigate to `http://192.168.0.199:
 I'm not a security expert, and based on how old some of these dependencies are, I wouldn't fully trust the security of OpenEats.  Therefore, I setup my Raspberry Pi to require a password for `sudo` calls.  It's an extra percaution that I'd recommend for others as well.  Simply run `sudo visudo /etc/sudoers.d/010_pi-nopasswd` and change the `pi` line to `pi ALL=(ALL) PASSWD: ALL`.
 
 As I make changes I'll do my best to keep this up to date.  I'll also try to keep the `bringup-pi` branches on all my projects around and stable for bringing up a basic build like this.
+
+### Additional Troubleshooting
+
+I did have a other issues which I'm not sure are related to the Raspberry Pi project, or Open-Eats in general
+
+#### Images not Appearing
+
+Images I added to my recipes weren't appearing.  I found the solution in this closed issue on the OpenEats project helpful.  To fix it, I opened sh on the docker api container:
+
+```bash
+docker-compose -f docker-prod.yml -f docker-prod.overwrite.yml run --rm --entrypoint 'sh' api
+```
+
+And once inside the shell, change the permissions of the site-media folder:
+
+```bash
+chmod -R 755 /code/site-media/
+```
