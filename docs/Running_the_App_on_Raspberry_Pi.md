@@ -11,6 +11,7 @@
     - [Running in Development Mode](#running-in-development-mode)
     - [Seeding the Database](#seeding-the-database)
     - [Running in Production Mode](#running-in-production-mode)
+    - [Running on Startup](#running-on-startup)
     - [Other Recommendations](#other-recommendations)
     - [Additional Troubleshooting](#additional-troubleshooting)
       - [Images not Appearing](#images-not-appearing)
@@ -185,6 +186,40 @@ docker-compose -f docker-prod.yml -f docker-prod.override.yml up
 ```
 
 From another computer, open a web browser and navigate to `http://192.168.0.199:8000`, using the IP address of the RPi and port 8000.
+
+### Running on Startup
+
+If you wish for the Openeats Docker containers to automatically startup when the Raspberry Pi is powered on, you may do that with a systemd service.
+
+Using sudo, create a file at `/etc/systemd/system/openeats.service` and copy in the following contents:
+
+```
+[Unit]
+Description=Docker Compose Application Service for OpenEats
+Requires=docker.service
+After=docker.service
+
+[Service]
+WorkingDirectory=/home/pi/OpenEats
+ExecStart=/usr/local/bin/docker-compose -f docker-prod.yml -f docker-prod.override.yml up
+ExecStop=/usr/local/bin/docker-compose down
+TimeoutStartSec=0
+Restart=on-failure
+StartLimitIntervalSec=180
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Save the file and then run:
+
+```bash
+sudo systemctl enable openeats.service
+sudo systemctl start openeats.service
+```
+
+Wait a couple of minutes for the server to turn on before trying to access it.  You may run `sudo systemctl status openeats.service` to see if it is up yet.
 
 ### Other Recommendations
 
