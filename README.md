@@ -6,7 +6,7 @@ by a few members of my family including my mom who is an avid cook.  Here are my
 ## Initial Goals
 
 - [x] Run OpenEats on the Raspberry Pi and access the web server from my local network
-- [ ] Import my Mom's existing recipes from her [Cook'n](http://www.dvo.com/?fbclid=IwAR1EH1wiRhb03MtFBsI7yXU9zqk__C5YiUEas-ax4ck2d0dU11LlopQnyJY) software
+- [x] Import my Mom's existing recipes from her [Cook'n](http://www.dvo.com/?fbclid=IwAR1EH1wiRhb03MtFBsI7yXU9zqk__C5YiUEas-ax4ck2d0dU11LlopQnyJY) software
 - [ ] Purchase a domain and run my fork through that so it can be accessed off the network
 - [ ] Add SSL and a firewall to secure the server
 - [ ] Develop a cron job for backing up the database to an external location.  I've had bad luck with RPi SD cards failing.
@@ -22,6 +22,13 @@ by a few members of my family including my mom who is an avid cook.  Here are my
 I kept all the OpenEats docs in place, but will be adding on to the `docs` folder.  Check out these docs I've written:
 
 * [Running the App on Raspberry Pi](docs/Running_the_App_on_Raspberry_Pi.md)
+
+## Other Forks
+
+* [openeats-api](https://github.com/cvanbeek13/openeats-api)
+* [openeats-nginx](https://github.com/cvanbeek13/openeats-nginx)
+* [openeats-web](https://github.com/cvanbeek13/openeats-web)
+* [recipe-scrapers](https://github.com/cvanbeek13/recipe-scrapers)
 
 # OpenEats Project
 
