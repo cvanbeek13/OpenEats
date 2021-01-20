@@ -20,3 +20,7 @@ NODE_ENV=production
 NODE_URL=localhost:8080
 NODE_API_URL=http://192.168.0.199:8000
 NODE_LOCALE=en
+
+# Google Drive Backups config
+GOOGLE_DRIVE_CREDENTIALS_FILE=/home/pi/OpenEats/change-to-my-creds-file.json
+GOOGLE_DRIVE_BACKUP_FOLDER_ID=folder_id_from_google_drive_url

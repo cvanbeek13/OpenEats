@@ -2,19 +2,9 @@
 
 # Creates a backup for the OpenEats database and images
 #
-# In order for this to work the working directory needs to be the OpenEats folder.
-# That folder is set with the OPENEATS_DIR variable; change it if yours is different.
-#
-# This can be run as a cron job to run hourly, daily, or weekly simply by making this
-# script executable and putting it in /etc/cron.hourly, /etc/cron.daily, /etc/cron.weekly,
-# or /etc/cron.monthly.  You'll also need to remove the file extension:
-#
-#   sudo chmod +x backup.py
-#   sudo cp ./backup.py /etc/cron.weekly/openeats-backup
-#
-# The script will first create and zip a temporary backup and then upload the backup
-# to Google Drive.  This means an API key will need to be added to the env_prod.list file
+# See docs/Taking_and_Restoring_Backups.md for directions on using this script
 
+import errno
 import os
 import shutil
 import subprocess
@@ -22,7 +12,14 @@ import sys
 
 from datetime import datetime
 
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google.oauth2 import service_account
 
+# Backup Options
+BACKUP_GOOGLE_DRIVE = True
+
+# Other Variables
 OPENEATS_DIR = "/home/pi/OpenEats"
 TMP_DIR = "/tmp"
 ENV_FILE = "env_prod.list"
@@ -66,9 +63,11 @@ except Exception as e:
 
 try:
     DATABASE_PASSWORD = vars_dict['MYSQL_ROOT_PASSWORD']
-    # GOOGLE_API_KEY = vars_dict['GOOGLE_API_KEY']
     DATABASE_NAME = vars_dict['MYSQL_DATABASE'] if 'MYSQL_DATABASE' in vars_dict else "openeats"
     DATABASE_USER = vars_dict['MYSQL_USER'] if 'MYSQL_USER' in vars_dict else "openeats"
+    if BACKUP_GOOGLE_DRIVE:
+        GOOGLE_DRIVE_CREDENTIALS_FILE = vars_dict['GOOGLE_DRIVE_CREDENTIALS_FILE']
+        GOOGLE_DRIVE_BACKUP_FOLDER_ID = vars_dict['GOOGLE_DRIVE_BACKUP_FOLDER_ID']
 except KeyError as e:
     print(f"MYSQL_ROOT_PASSWORD or GOOGLE_API_KEY missing from {ENV_FILE}: {e}", file=sys.stderr)
     exit(1)
@@ -94,3 +93,36 @@ run_process(img_cp_cmd)
 # Zip the folder
 backup_zip = shutil.make_archive(backup_dir, 'zip', backup_dir)
 shutil.rmtree(backup_dir)
+
+drive_backup_failure = False
+if BACKUP_GOOGLE_DRIVE:
+    try:
+        if not os.path.exists(GOOGLE_DRIVE_CREDENTIALS_FILE):
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), GOOGLE_DRIVE_CREDENTIALS_FILE)
+
+        # Load the creds and create the service
+        SCOPES = ['https://www.googleapis.com/auth/drive.file']
+        creds = service_account.Credentials.from_service_account_file(GOOGLE_DRIVE_CREDENTIALS_FILE, scopes=SCOPES)
+        service = build('drive', 'v3', credentials=creds)
+
+        print(f"Uploading file {backup_zip} to Google Drive...")
+        _, drive_file_name = os.path.split(backup_zip)
+
+        # Create and send the file creation request
+        body = {
+            'name': drive_file_name,
+            'parents': [GOOGLE_DRIVE_BACKUP_FOLDER_ID]
+        }
+        media = MediaFileUpload(backup_zip, mimetype='application/zip')
+        drive_file = service.files().create(body=body, media_body=media).execute()
+
+        print(f"Created file {drive_file.get('name')} id {drive_file.get('id')}.")
+
+    except Exception as e:
+        print(f"Unable to upload {backup_zip} to Google Drive: {e}")
+        drive_backup_failure = True
+
+if BACKUP_GOOGLE_DRIVE:
+    os.remove(backup_zip)
+
+exit(drive_backup_failure)
