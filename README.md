@@ -9,7 +9,7 @@ by a few members of my family including my mom who is an avid cook.  Here are my
 - [x] Import my Mom's existing recipes from her [Cook'n](http://www.dvo.com/?fbclid=IwAR1EH1wiRhb03MtFBsI7yXU9zqk__C5YiUEas-ax4ck2d0dU11LlopQnyJY) software
 - [ ] Purchase a domain and run my fork through that so it can be accessed off the network
 - [ ] Add SSL and a firewall to secure the server
-- [ ] Develop a cron job for backing up the database to an external location.  I've had bad luck with RPi SD cards failing.
+- [x] Develop a cron job for backing up the database to an external location.  I've had bad luck with RPi SD cards failing.
 - [ ] Provide in-depth documentation of all these steps so others can do the same if desired
 
 ## Stretch Goals
@@ -19,9 +19,10 @@ by a few members of my family including my mom who is an avid cook.  Here are my
 
 ## Docs
 
-I kept all the OpenEats docs in place, but will be adding on to the `docs` folder.  Check out these docs I've written:
+I kept all the original OpenEats docs in place, but will be adding on to the `docs` folder.  Check out these docs I've written or updated:
 
-* [Running the App on Raspberry Pi](docs/Running_the_App_on_Raspberry_Pi.md)
+* Created [Running the App on Raspberry Pi](docs/Running_the_App_on_Raspberry_Pi.md)
+* Updated [Taking and Restoring Backups](docs/Taking_and_Restoring_Backups.md)
 
 ## Other Forks
 
