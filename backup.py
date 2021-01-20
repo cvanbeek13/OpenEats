@@ -16,9 +16,6 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2 import service_account
 
-# Backup Options
-BACKUP_GOOGLE_DRIVE = True
-
 # Other Variables
 OPENEATS_DIR = "/home/pi/OpenEats"
 TMP_DIR = "/tmp"
@@ -65,9 +62,11 @@ try:
     DATABASE_PASSWORD = vars_dict['MYSQL_ROOT_PASSWORD']
     DATABASE_NAME = vars_dict['MYSQL_DATABASE'] if 'MYSQL_DATABASE' in vars_dict else "openeats"
     DATABASE_USER = vars_dict['MYSQL_USER'] if 'MYSQL_USER' in vars_dict else "openeats"
+    BACKUP_GOOGLE_DRIVE = vars_dict['BACKUP_GOOGLE_DRIVE'].lower() == 'true' if 'BACKUP_GOOGLE_DRIVE' in vars_dict else False
     if BACKUP_GOOGLE_DRIVE:
         GOOGLE_DRIVE_CREDENTIALS_FILE = vars_dict['GOOGLE_DRIVE_CREDENTIALS_FILE']
         GOOGLE_DRIVE_BACKUP_FOLDER_ID = vars_dict['GOOGLE_DRIVE_BACKUP_FOLDER_ID']
+        DATABASE_HOSTED_IN_DOCKER = vars_dict['DATABASE_HOSTED_IN_DOCKER'].lower() == 'true' if 'DATABASE_HOSTED_IN_DOCKER' in vars_dict else True
 except KeyError as e:
     print(f"MYSQL_ROOT_PASSWORD or GOOGLE_API_KEY missing from {ENV_FILE}: {e}", file=sys.stderr)
     exit(1)
@@ -81,7 +80,10 @@ mkdir(backup_dir)
 # Get a SQL dump from the MySQL Database.
 # Note that my Fork hosts the database on the RPi, not Docker for me the command is:
 # mysqldump openeats -u openeats -p"<PASSWORD>" > dump.sql
-dump_cmd = f"mysqldump {DATABASE_NAME} -u {DATABASE_USER} --password='{DATABASE_PASSWORD}' > {os.path.join(backup_dir, SQL_DUMP_FILE_NAME)}"
+if DATABASE_HOSTED_IN_DOCKER:
+    dump_cmd = f"docker exec openeats_db_1 sh -c 'exec mysqldump {DATABASE_NAME} -u {DATABASE_USER} --password=\"{DATABASE_PASSWORD}\"' > {os.path.join(backup_dir, SQL_DUMP_FILE_NAME)}"
+else: 
+    dump_cmd = f"mysqldump {DATABASE_NAME} -u {DATABASE_USER} --password='{DATABASE_PASSWORD}' > {os.path.join(backup_dir, SQL_DUMP_FILE_NAME)}"
 run_process(dump_cmd, shell=True)
 
 # Backup the images

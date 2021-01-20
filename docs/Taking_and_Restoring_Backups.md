@@ -58,9 +58,12 @@ pscp my-creds-file.json pi@192.169.0.199:OpenEats
 
 The `backup.py` file is what takes care of the backups.  It reads values from the `env_prod.list` file you created when setting up OpenEats.  
 
-In that file, change `GOOGLE_DRIVE_CREDENTIALS_FILE` to the absolute path of the json file you just copied to the RPi.  
+In the `env_prod.list` file:
 
-Change GOOGLE_DRIVE_BACKUP_FOLDER_ID to the folder ID found in the URL when viewing the Google Drive folder from a web browser (not the full URL, just the ID).
+* Change `BACKUP_GOOGLE_DRIVE` to `true`
+* Change `GOOGLE_DRIVE_CREDENTIALS_FILE` to the absolute path of the json file you just copied to the RPi.  
+* Change `GOOGLE_DRIVE_BACKUP_FOLDER_ID` to the folder ID found in the URL when viewing the Google Drive folder from a web browser (not the full URL, just the ID).
+* If your MySQL instance is running on the RPi instead of through Docker, change `DATABASE_HOSTED_IN_DOCKER` to `false`
 
 ### Install packages for pip
 
