@@ -3,6 +3,15 @@
 # Creates a backup for the OpenEats database and images
 #
 # In order for this to work the working directory needs to be the OpenEats folder.
+# That folder is set with the OPENEATS_DIR variable; change it if yours is different.
+#
+# This can be run as a cron job to run hourly, daily, or weekly simply by making this
+# script executable and putting it in /etc/cron.hourly, /etc/cron.daily, /etc/cron.weekly,
+# or /etc/cron.monthly.  You'll also need to remove the file extension:
+#
+#   sudo chmod +x backup.py
+#   sudo cp ./backup.py /etc/cron.weekly/openeats-backup
+#
 # The script will first create and zip a temporary backup and then upload the backup
 # to Google Drive.  This means an API key will need to be added to the env_prod.list file
 
@@ -14,6 +23,7 @@ import sys
 from datetime import datetime
 
 
+OPENEATS_DIR = "/home/pi/OpenEats"
 TMP_DIR = "/tmp"
 ENV_FILE = "env_prod.list"
 SQL_DUMP_FILE_NAME = "openeats_dump.sql"
@@ -40,6 +50,9 @@ def run_process(cmd, shell=False):
         print(f"process ({cmd_string}) exited with code {process.returncode}")
         exit(1)
 
+
+# Script Start
+os.chdir(OPENEATS_DIR)
 
 try:
     with open(ENV_FILE, 'r') as fh:
