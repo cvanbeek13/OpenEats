@@ -14,7 +14,7 @@ by a few members of my family including my mom who is an avid cook.  Here are my
 
 ## Stretch Goals
 
-- [ ] In the Browse Recipe's Page I want to add a way to filter Tags like you can with courses and cuisines.
+- [x] In the Browse Recipe's Page I want to add a way to filter Tags like you can with courses and cuisines.
 - [ ] I would like to add my [Recipe Scraper Fork](https://github.com/cvanbeek13/recipe-scrapers) into a new import page.
 
 ## Docs
@@ -25,6 +25,8 @@ I kept all the original OpenEats docs in place, but will be adding on to the `do
 * Updated [Taking and Restoring Backups](docs/Taking_and_Restoring_Backups.md)
 
 ## Other Forks
+
+Here are my other forks I'm using with OpenEats
 
 * [openeats-api](https://github.com/cvanbeek13/openeats-api)
 * [openeats-nginx](https://github.com/cvanbeek13/openeats-nginx)

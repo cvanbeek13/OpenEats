@@ -90,6 +90,8 @@ To get around this, I used the [Docker-Host](https://github.com/qoomon/docker-ho
 
 In each `.yml` file, I also made the `api` container depend on the `dockerhost` container.
 
+[Reference](https://sam-ngu.medium.com/connecting-to-docker-host-mysql-from-docker-container-linux-ubuntu-766e526542fd)
+
 ## How to Start OpenEats from my Fork
 
 If you don't care about the changes I made and just want to get this thing running, this is where you should be.  I'll walk through the process to the best of my ability.  I haven't tried it on a fresh RPi, but these are all the steps I can remember.
