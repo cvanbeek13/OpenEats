@@ -70,7 +70,7 @@ In the `env_prod.list` file:
 The backup.py script requires a few modules to be installed for the Google Drive API.  Install them by running:
 
 ```bash
-python3 -m pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+sudo /usr/lib/env python3 -m pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
 
 At this point you should be able to run the script.  Once you run it you should see a zip file appear in your Google Drive folder.
